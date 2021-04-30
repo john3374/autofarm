@@ -1,5 +1,36 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .container-fluid
+    .row
+      .col.s12.m6
+        .card
+          .card-image
+            img(src='images/light.jpg')
+            span.card-title 전등
+            a.btn-floating.halfway-fab.waves-effect.waves-light.red: i.fas.fa-cog
+          .card-content
+            .row
+              form.col.s12
+                .row
+                  .input-field.col.s12.m6
+                    i.material-icons.prefix schedule
+                    input#lightStart.timepicker(type='text')
+                    label(for='lightStart') 시작 시간
+                  p.range-field.col.s12.m6
+                    input(type='range' min='0' max='24')
+          .card-action
+            .switch
+              label 끄기
+                input(type='checkbox')
+                span.lever
+                | 켜기
+      .col.s12.m6
+        .card
+          .card-content
+            span.card-title 펌프
+
+          .card-action
+            a.waves-effect.waves-light.btn 켜기/끄기
+            a.waves-effect.waves-light.btn.right 자동
+              i.fas.fa-cog.fa-spin.right

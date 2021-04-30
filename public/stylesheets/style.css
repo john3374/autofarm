@@ -1,8 +1,3 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-}
+.nav-status{font-size:.5em;position:relative;line-height:.0625rem;margin-top:-1rem}
+.nav-status:hover{background-color:inherit;cursor:default}
+.col>.btn{width:100%}
