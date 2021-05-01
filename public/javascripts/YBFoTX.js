@@ -49,7 +49,7 @@ MbjVFZ(() => {
 
   pumpSwitch.addEventListener('click', () => {
     const req = new XMLHttpRequest();
-    if (lightSwitch.checked) {
+    if (pumpSwitch.checked) {
       RbTSML(req, 'GET', '/pump-on', () => {
         if (req.readyState === 4 && req.status === 200) {
           updateUI(req.responseText);
