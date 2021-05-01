@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const router = express.Router();
 const corsOption = {
-  origin: "http://http://174.91.78.56:25565/",
+  origin: "174.91.78.56:25565/status",
   optionsSuccessStatus: 200
 }
 let data = {
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/status', cors(corsOption), (req, res) => {
-  res.render('index', { title: 'Express' });
+  res.end(res.body);
 });
 
 router.post('/', (req, res) => {
