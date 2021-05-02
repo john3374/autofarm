@@ -5,10 +5,14 @@ const MbjVFZ = fn =>
 const ZrKSTb = a => document.getElementById(a);
 const uIakmy = a => document.querySelector(a);
 const zUyYQQ = a => document.querySelectorAll(a);
-const RbTSML = (z, method, url, fn, jsonBody = null) => {
-  z.onreadystatechange = fn;
-  z.open(method, url, true);
+const RbTSML = (options = null) => {
+  if (!options) return false;
+  const z = new XMLHttpRequest();
+  const { path, method, body, success } = options;
+  z.onreadystatechange = () => z.readyState == 4 && z.status == 200 ? success(z.responseText) : '';
+  z.open(method, path, true);
   z.setRequestHeader('Content-type', 'application/json');
-  if (jsonBody) z.send(JSON.stringify(jsonBody));
+  z.setRequestHeader('Cache-Control', 'no-cache');
+  if (body) z.send(JSON.stringify(body));
   else z.send();
 };
