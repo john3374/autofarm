@@ -3,6 +3,7 @@
 const app = require("../app");
 const debug = require("debug")("autofarm:server");
 const http = require("http");
+const cron = require('node-cron');
 
 const normalizePort = (val) => {
   const port = parseInt(val, 10);
@@ -39,6 +40,14 @@ const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 const server = http.createServer(app);
+
+cron.schedule('0 */4 * * *', () => {
+  http.request({ host: 'farm.akfn.net', path: '/pump-on' }).end();
+}, { scheduled: !0 });
+
+cron.schedule('1 */4 * * *', () => {
+  http.request({ host: 'farm.akfn.net', path: '/pump-off' }).end();
+}, { scheduled: !0 });
 
 server.listen(port);
 server.on("error", onError);
