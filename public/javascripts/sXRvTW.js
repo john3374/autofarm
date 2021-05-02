@@ -12,7 +12,3 @@ const RbTSML = (z, method, url, fn, jsonBody = null) => {
   if (jsonBody) z.send(JSON.stringify(jsonBody));
   else z.send();
 };
-
-MbjVFZ(() => {
-  M.Timepicker.init(zUyYQQ('.timepicker'));
-});
