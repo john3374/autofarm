@@ -2,6 +2,8 @@ const lightSwitch = ZrKSTb('wEdEsk');
 const pumpSwitch = ZrKSTb('BjozMz');
 const lightStatus = ZrKSTb('tqAAoo');
 const pumpStatus = ZrKSTb('kOlIKZ');
+const refresh = ZrKSTb('nkcMbm');
+
 const updateUI = (dataStr) => {
   const { light, pump } = JSON.parse(dataStr);
   if (pump == 0) {
@@ -20,57 +22,12 @@ const updateUI = (dataStr) => {
   }
 };
 
-let attempts = 1;
+const RESTCall = (path) => RbTSML({ path, method: 'GET', success: (data) => updateUI(data) });
+
 MbjVFZ(() => {
-  M.Timepicker.init(zUyYQQ('.timepicker'));
-  const req = new XMLHttpRequest();
-  RbTSML(req, 'GET', '/status', () => {
-    if (req.readyState === 4 && req.status === 200) {
-      console.log(req.responseText);
-    }
-  })
-
-  lightSwitch.addEventListener('click', () => {
-    const req = new XMLHttpRequest();
-    if (lightSwitch.checked) {
-      RbTSML(req, 'GET', '/light-on', () => {
-        if (req.readyState === 4 && req.status === 200) {
-          updateUI(req.responseText);
-        }
-      });
-    } else {
-      RbTSML(req, 'GET', '/light-off', () => {
-        if (req.readyState === 4 && req.status === 200) {
-          updateUI(req.responseText);
-        }
-      });
-    }
-  });
-
-  pumpSwitch.addEventListener('click', () => {
-    const req = new XMLHttpRequest();
-    if (pumpSwitch.checked) {
-      RbTSML(req, 'GET', '/pump-on', () => {
-        if (req.readyState === 4 && req.status === 200) {
-          updateUI(req.responseText);
-        }
-      });
-    } else {
-      RbTSML(req, 'GET', '/pump-off', () => {
-        if (req.readyState === 4 && req.status === 200) {
-          updateUI(req.responseText);
-        }
-      });
-    }
-  });
-
-  setInterval(() => {
-    const req = new XMLHttpRequest();
-    RbTSML(req, 'GET', '/status', () => {
-      if (req.readyState === 4 && req.status === 200) {
-        updateUI(req.responseText);
-        attempts = 1;
-      } else attempts++;
-    });
-  }, attempts * 10000);
+  M.Timepicker.init(zUyYQQ('.timepicker'), { onSelect: (h, m, a) => console.log(a), onCloseStart: (e) => console.log(e) });
+  RESTCall('/status');
+  lightSwitch.addEventListener('click', () => RESTCall(lightSwitch.checked ? '/light-on' : 'light-off'));
+  pumpSwitch.addEventListener('click', () => RESTCall(pumpSwitch.checked ? '/pump-on' : 'pump-off'));
+  refresh.addEventListener('click', () => RESTCall('/status'));
 });
