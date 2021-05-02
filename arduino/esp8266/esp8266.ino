@@ -60,6 +60,7 @@ void respondStatus() {
   else
     server.send(200, "text/plain", "no answer");
 }
+
 void handleRoot() {
   server.send(200, "application/json", statusJSON);   // Send HTTP status 200 (Ok) and send some text to the browser/client
 }
@@ -84,11 +85,11 @@ void turnPumpOff() {
 }
 
 void turnLightOn() {
-  Serial.println(30);
+  Serial.println(24);
   respondStatus();
 }
 
 void turnLightOff() {
-  Serial.println(10);
+  Serial.println(8);
   respondStatus();
 }

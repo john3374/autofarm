@@ -75,11 +75,11 @@ void loop() {
   if (Serial.available()) {
     int cmd = Serial.parseInt();
     // ignore 0 since invalid int value returns 0
-    // 100001 - status
+    // 00001 - status
     if (cmd > 0) {
       if (cmd & 1)
         printStatus();
-      // 100110 - pump
+      // 00110 - pump
       cmd >>= 1;
       if (cmd & 1) {
         cmd >>= 1;
