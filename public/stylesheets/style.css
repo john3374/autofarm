@@ -1,3 +1,7 @@
+@media only screen and (min-width:600px){
+.brand-logo{margin-left:1.25em}
+}
 .nav-status{font-size:.5em;position:relative;line-height:.0625rem;margin-top:-1rem}
 .nav-status:hover{background-color:inherit;cursor:default}
 .col>.btn{width:100%}
+.progress{margin:0;transition:visibility 1s}
