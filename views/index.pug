@@ -8,10 +8,10 @@ block content
           .card-image
             img(src='images/location.jpg')
             span.card-title 위치 1
-            a.btn-floating.halfway-fab.waves-effect.waves-light.pink.activator: i.fas.fa-cog
+            a.btn-floating.halfway-fab.waves-effect.waves-light.blue.activator: i.material-icons settings
           .card-content
             p 상추들
-            ul.collection.with-header
+            ul.collection.with-header.VPVTyI(data-location="1")
               li.collection-header 기록
               li.collection-item 전등 켜짐
                 span.badge john, 1 시간 전
@@ -20,7 +20,7 @@ block content
           .card-action
             .row
               .col.s12.m6
-                .primary-text 전등
+                .teal-text 전등
                 .switch
                   label 끄기
                     input#wEdEsk(type='checkbox')
@@ -57,6 +57,17 @@ block content
                   .prefix: h6 매
                   input#pumpRepeat(type='number')
                   label(for='pumpRepeat') 시간마다 반복
-
+  #dYdISy.modal
+    .modal-content
+      p 로그인이 필요한 기능입니다
+      .input-field
+        input#username(type="text")
+        label(for="username") 아이디
+      .input-field
+        input#password(type="password")
+        label(for="password") 비밀번호
+    .modal-footer
+      a.wave-effect.wave-green.btn 로그인
+      a.modal-close.wave-effect.wave-green.btn-flat 취소
 block scripts
   script(src="/javascripts/YBFoTX.js")
