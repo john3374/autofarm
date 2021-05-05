@@ -43,11 +43,21 @@ const server = http.createServer(app);
 
 cron.schedule('0 */8 * * *', () => {
   http.request({ host: 'farm.akfn.net', path: '/pump-off' }).end();
-  db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [1, 1, 'on', 1]);
+  db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [2, 1, 'on', 1]);
 }, { scheduled: !0 });
 
 cron.schedule('1 */8 * * *', () => {
   http.request({ host: 'farm.akfn.net', path: '/pump-on' }).end();
+  db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [2, 1, 'off', 1]);
+}, { scheduled: !0 });
+
+cron.schedule('0 8 * * *', () => {
+  http.request({ host: 'farm.akfn.net', path: '/light-off' }).end();
+  db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [1, 1, 'on', 1]);
+}, { scheduled: !0 });
+
+cron.schedule('0 23 * * *', () => {
+  http.request({ host: 'farm.akfn.net', path: '/light-on' }).end();
   db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [1, 1, 'off', 1]);
 }, { scheduled: !0 });
 
