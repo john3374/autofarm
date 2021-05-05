@@ -48,7 +48,7 @@ const updateLog = (log, httpStatus, responseText) => {
     li.innerHTML = `${name} ${status}<span class="badge">${by}, ${df.format(Date.parse(created))}</span>`
     log.appendChild(li);
   }
-}
+};
 
 const updateUI = () => {
   const { light, pump } = snapshot["1"];
