@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const https = require("https");
 const db = require("../mysqlPool");
 const router = express.Router();
 
@@ -23,6 +24,9 @@ const gstrFG = (res, path, iduser) => {
               else if (ddh[0].endsWith("light")) idequip = 1;
               if (ddh[1] === "on") status = "off";
               else if (ddh[1] === "off") status = "on";
+              const ntfy = https.request({ hostname: "ntfy.akfn.net", port: 443, path: "/farm", method: "POST" });
+              ntfy.write(`${ddh[0]} ${status}`);
+              ntfy.end();
               db.pool.query("INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)", [idequip, obj.location, status, 1]);
             }
             res.json(obj);
