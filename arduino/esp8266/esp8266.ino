@@ -2,8 +2,8 @@
 #include <ESP8266mDNS.h>
 #include <ESP8266WebServer.h>
 
-const char* ssid     = "kppc-sanctuary-l";         // The SSID (name) of the Wi-Fi network you want to connect to
-const char* password = "kppckppc";     // The password of the Wi-Fi network
+const char* ssid     = "ssid";         // The SSID (name) of the Wi-Fi network you want to connect to
+const char* password = "password";     // The password of the Wi-Fi network
 ESP8266WebServer server(80);
 String statusJSON = "{}";
 

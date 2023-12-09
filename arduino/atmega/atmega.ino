@@ -4,6 +4,7 @@
 #define MANUAL_LIGHT_SWITCH 12
 #define PUMP_RELAY 6
 #define LIGHT_RELAY 7
+#define FAN_RELAY 8
 
 int isPumpOn = 0, isLightOn = 0;
 int switchVal;
@@ -59,6 +60,7 @@ void setup() {
   pinMode(13, OUTPUT);
   pinMode(PUMP_RELAY, OUTPUT);
   pinMode(LIGHT_RELAY, OUTPUT);
+  pinMode(FAN_RELAY, OUTPUT);
   digitalWrite(13, HIGH);
 }
 
@@ -95,7 +97,17 @@ void loop() {
         isLightOn = cmd & 1;
         digitalWrite(LIGHT_RELAY, cmd & 1);
         printStatus();
-      }
+      } else
+        cmd >>= 1;
+      // 1100000 - fan
+      cmd >>= 1;
+      if (cmd & 1) {
+        cmd >>= 1;
+        isLightOn = cmd & 1;
+        digitalWrite(FAN_RELAY, cmd & 1);
+        printStatus();
+      } else
+        cmd >>= 1;
     }
   }
   delay(50);
