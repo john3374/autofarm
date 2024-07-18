@@ -1,17 +1,30 @@
-### Node Express template project
+# Authgreenth Project
 
-This project is based on a GitLab [Project Template](https://docs.gitlab.com/ee/gitlab-basics/create-project.html).
+## Overview
 
-Improvements can be proposed in the [original project](https://gitlab.com/gitlab-org/project-templates/express).
+The Authgreenth project focuses on programming the ESP8266 and ATmega(arduino) microcontrollers for smart farm application. This project aims to leverage the capabilities of these popular microcontrollers to build efficient and reliable systems for various use cases.
 
-### CI/CD with Auto DevOps
+## Getting Started
 
-This template is compatible with [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/).
+### Installation
 
-If Auto DevOps is not already enabled for this project, you can [turn it on](https://docs.gitlab.com/ee/topics/autodevops/#enabling-auto-devops) in the project settings.
+1. **Set up your development environment**: Ensure that you have all the necessary tools and software installed on your computer.
+2. **Connect your microcontroller**: Follow the specific instructions for connecting the ESP8266 or ATmega to your computer.
+3. **Programming**: Use the provided examples and guides to start programming your microcontroller.
 
-### Developing with Gitpod
+## Usage
 
-This template has a fully-automated dev setup for [Gitpod](https://docs.gitlab.com/ee/integration/gitpod.html).
+Refer to the specific sections for ESP8266 and ATmega programming to understand how to write, compile, and upload code to your microcontrollers.
 
-If you open this project in Gitpod, you'll get all Node dependencies pre-installed and Express will open a web preview.
+## Contributing
+
+Contributions to the Authgreenth project are welcome. Please read the CONTRIBUTING.md file for more information on how to contribute.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+## Acknowledgments
+
+- Thanks to the open-source community for providing invaluable resources and tools.
+- Special thanks to everyone who has contributed to the development and documentation of the ESP8266 and ATmega microcontrollers.

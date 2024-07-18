@@ -1,33 +1,32 @@
-const express = require("express");
-const http = require("http");
-const https = require("https");
-const db = require("../mysqlPool");
+const express = require('express');
+const http = require('http');
+const https = require('https');
+const db = require('../mysqlPool');
 const router = express.Router();
+const host = process.env.CONTROLLER_IP;
 
 const gstrFG = (res, path, iduser) => {
   if (1)
     // TODO: make login work...
     http
-      .request({ host: "192.168.2.76", path }, (res2) => {
-        let str = "";
-        res2.on("data", (chunk) => (str += chunk));
-        res2.on("end", () => {
+      .request({ host, path }, res2 => {
+        let str = '';
+        res2.on('data', chunk => (str += chunk));
+        res2.on('end', () => {
           try {
             const obj = JSON.parse(str.replace(/([a-zA-Z]+)/gi, '"$1"'));
             obj.location = 1;
             // TODO: change to POST with body
-            if (path !== "/status") {
-              const ddh = path.split("-");
-              let idequip = 0,
-                status = "";
-              if (ddh[0].endsWith("pump")) idequip = 2;
-              else if (ddh[0].endsWith("light")) idequip = 1;
-              if (ddh[1] === "on") status = "off";
-              else if (ddh[1] === "off") status = "on";
-              const ntfy = https.request({ hostname: "ntfy.akfn.net", port: 443, path: "/farm", method: "POST" });
-              ntfy.write(`${ddh[0]} ${status}`);
+            if (path !== '/status') {
+              const ddh = path.split('-');
+              let idequip = 0;
+              if (ddh[0].endsWith('pump')) idequip = 2;
+              else if (ddh[0].endsWith('light')) idequip = 1;
+              else if (ddh[0].endsWith('fan')) idequip = 3;
+              const ntfy = https.request({ hostname: 'ntfy.akfn.net', port: 443, path: '/farm', method: 'POST' });
+              ntfy.write(`${ddh[0]} ${ddh[1]}`);
               ntfy.end();
-              db.pool.query("INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)", [idequip, obj.location, status, 1]);
+              db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [idequip, obj.location, ddh[1], 1]);
             }
             res.json(obj);
           } catch (e) {
@@ -50,20 +49,20 @@ let data = {
 let lastUpdate = 0,
   statusCache = null;
 
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   const { auth_token, auth_expiry } = req.session;
-  if (auth_expiry < new Date().getTime()) res.redirect("/account/signin");
-  else res.render("index", { auth_token });
+  if (auth_expiry < new Date().getTime()) res.redirect('/account/signin');
+  else res.render('index', { auth_token });
 });
 
-router.get("/status", (req, res) =>
+router.get('/status', (req, res) =>
   statusCache && new Date().getTime() - lastUpdate < 5000
     ? res.json(statusCache)
     : http
-        .request({ host: "192.168.2.76", path: "/status" }, (res2) => {
-          let str = "";
-          res2.on("data", (chunk) => (str += chunk));
-          res2.on("end", () => {
+        .request({ host, path: '/status' }, res2 => {
+          let str = '';
+          res2.on('data', chunk => (str += chunk));
+          res2.on('end', () => {
             try {
               const obj = JSON.parse(str.replace(/([a-zA-Z]+)/gi, '"$1"'));
               obj.location = 1;
@@ -79,20 +78,22 @@ router.get("/status", (req, res) =>
         .end()
 );
 
-router.get("/pump-on", ({ session: { iduser } }, res) => gstrFG(res, "/pump-off", iduser));
-router.get("/pump-off", ({ session: { iduser } }, res) => gstrFG(res, "/pump-on", iduser));
-router.get("/light-on", ({ session: { iduser } }, res) => gstrFG(res, "/light-off", iduser));
-router.get("/light-off", ({ session: { iduser } }, res) => gstrFG(res, "/light-on", iduser));
+router.get('/pump-on', ({ session: { iduser } }, res) => gstrFG(res, '/pump-on', iduser));
+router.get('/pump-off', ({ session: { iduser } }, res) => gstrFG(res, '/pump-off', iduser));
+router.get('/light-on', ({ session: { iduser } }, res) => gstrFG(res, '/light-on', iduser));
+router.get('/light-off', ({ session: { iduser } }, res) => gstrFG(res, '/light-off', iduser));
+router.get('/fan-on', ({ session: { iduser } }, res) => gstrFG(res, '/fan-on', iduser));
+router.get('/fan-off', ({ session: { iduser } }, res) => gstrFG(res, '/fan-off', iduser));
 
-router.post("/log", (req, res) => {
+router.post('/log', (req, res) => {
   const { location } = req.body;
   db.pool.query(
-    "select b.name as `name`, a.`status` as `status`, a.created as created, c.nickname as `by` from usagelog a join equipment b on a.idequipment=b.idequipment join user c on a.createdBy=c.iduser where a.idlocation=? order by a.created desc limit 4",
+    'select b.name as `name`, a.`status` as `status`, a.created as created, c.nickname as `by` from usagelog a join equipment b on a.idequipment=b.idequipment join user c on a.createdBy=c.iduser where a.idlocation=? order by a.created desc limit 4',
     [location],
     (err, dres) => {
       if (err) {
         console.log(err);
-        res.status(500).end("error");
+        res.status(500).end('error');
       } else {
         res.json(dres);
       }

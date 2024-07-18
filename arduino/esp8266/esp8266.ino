@@ -42,6 +42,8 @@ void setup() {
   server.on("/pump-off", turnPumpOff);
   server.on("/light-on", turnLightOn);
   server.on("/light-off", turnLightOff);
+  server.on("/fan-on", turnFanOn);
+  server.on("/fan-off", turnFanOff);
   server.onNotFound(handleNotFound);        // When a client requests an unknown URI (i.e. something other than "/"), call function "handleNotFound"
 
   server.begin();                           // Actually start the server
@@ -91,5 +93,15 @@ void turnLightOn() {
 
 void turnLightOff() {
   Serial.println(8);
+  respondStatus();
+}
+
+void turnFanOn() {
+  Serial.println(96);
+  respondStatus();
+}
+
+void turnFanOff() {
+  Serial.println(32);
   respondStatus();
 }

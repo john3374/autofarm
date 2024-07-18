@@ -1,30 +1,31 @@
 #!/usr/bin/env node
 
-const app = require("../app");
-const debug = require("debug")("autofarm:server");
-const http = require("http");
-const https = require("https");
-const cron = require("node-cron");
+const app = require('../app');
+const debug = require('debug')('autofarm:server');
+const http = require('http');
+const https = require('https');
+const cron = require('node-cron');
+const host = process.env.CONTROLLER_IP;
 
-const normalizePort = (val) => {
+const normalizePort = val => {
   const port = parseInt(val, 10);
   if (isNaN(port)) return val;
   if (port >= 0) return port;
   return false;
 };
 
-const onError = (error) => {
-  if (error.syscall !== "listen") throw error;
+const onError = error => {
+  if (error.syscall !== 'listen') throw error;
 
-  let bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+  let bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
       process.exit(1);
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
       process.exit(1);
     default:
       throw error;
@@ -33,49 +34,49 @@ const onError = (error) => {
 
 const onListening = () => {
   const addr = server.address();
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Listening on " + bind);
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
 };
 
-const port = normalizePort(process.env.PORT || "5000");
-app.set("port", port);
+const port = normalizePort(process.env.PORT || '5000');
+app.set('port', port);
 
 const server = http.createServer(app);
 
 // cron.schedule('0 8 */3 * *', () => {
-//   http.request({ host: '192.168.2.76', path: '/pump-off' }).end();
+//   http.request({ host, path: '/pump-off' }).end();
 //   db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [2, 1, 'on', 1]);
 // }, { scheduled: !0 });
 
 // cron.schedule('1 8 */3 * *', () => {
-//   http.request({ host: '192.168.2.76', path: '/pump-on' }).end();
+//   http.request({ host, path: '/pump-on' }).end();
 //   db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [2, 1, 'off', 1]);
 // }, { scheduled: !0 });
 
 cron.schedule(
-  "0 4 * * *",
+  '0 4 * * *',
   () => {
-    http.request({ host: "192.168.2.76", path: "/light-off" }).end();
-    const ntfy = https.request({ hostname: "ntfy.akfn.net", port: 443, path: "/farm", method: "POST" });
-    ntfy.write('light on');
+    http.request({ host, path: '/light-off' }).end();
+    const ntfy = https.request({ hostname: 'ntfy.akfn.net', port: 443, path: '/farm', method: 'POST' });
+    ntfy.write('light off');
     ntfy.end();
-    db.pool.query("INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)", [1, 1, "on", 1]);
+    db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [1, 1, 'off', 1]);
   },
   { scheduled: !0 }
 );
 
 cron.schedule(
-  "0 20 * * *",
+  '0 20 * * *',
   () => {
-    http.request({ host: "192.168.2.76", path: "/light-on" }).end();
-    const ntfy = https.request({ hostname: "ntfy.akfn.net", port: 443, path: "/farm", method: "POST" });
-    ntfy.write('light off');
+    http.request({ host, path: '/light-on' }).end();
+    const ntfy = https.request({ hostname: 'ntfy.akfn.net', port: 443, path: '/farm', method: 'POST' });
+    ntfy.write('light on');
     ntfy.end();
-    db.pool.query("INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)", [1, 1, "off", 1]);
+    db.pool.query('INSERT INTO usagelog (idequipment, idlocation, status, createdBy) values (?,?,?,?)', [1, 1, 'on', 1]);
   },
   { scheduled: !0 }
 );
 
 server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+server.on('error', onError);
+server.on('listening', onListening);
